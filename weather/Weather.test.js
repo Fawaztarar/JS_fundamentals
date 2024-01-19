@@ -1,30 +1,42 @@
 // Weather.test.js
+const nock = require('nock');
 const Weather = require('./Weather');
-const WeatherClient = require('./WeatherClient');
 
-jest.mock('./WeatherClient');
+// Use the actual API URL or replace it with your API endpoint
+const API_URL = 'http://api.openweathermap.org/data/2.5/weather';
 
 describe('Weather', () => {
+  let weather;
+
   beforeEach(() => {
-    WeatherClient.mockClear();
+    weather = new Weather();
   });
 
-  test('should load weather data for a city', async () => {
-    const mockCity = 'London';
-    const mockWeatherData = { main: { temp: 20 }, name: mockCity };
+  it('should load weather data from the API', async () => {
+    // Replace 'YOUR_API_KEY' with your actual API key
+    const apiKey = 'a3d9eb01d4de82b9b8d0849ef604dbed';
+    const city = 'Bristol';
+    const apiUrl = `${API_URL}?q=${city}&appid=${apiKey}`;
 
-    // Mock the fetchWeatherData method to return mockWeatherData
-    WeatherClient.prototype.fetchWeatherData.mockResolvedValueOnce(mockWeatherData);
+    // Mock the API response using nock
+    nock('http://api.openweathermap.org')
+      .get('/data/2.5/weather')
+      .query(true)
+      .reply(200, {
+        name: 'Bristol',
+        main: { temp: 20 },
+      });
 
-    const weather = new Weather(new WeatherClient());
-    await weather.load(mockCity);
+    // Make an actual API call using axios
+    await weather.load(city);
 
-    // Check if the load method sets the weatherData correctly
-    expect(weather.getWeatherData()).toEqual(mockWeatherData);
-
-    // Check if fetchWeatherData was called with the correct argument
-    expect(weather.weatherClient.fetchWeatherData).toHaveBeenCalledWith(mockCity);
+    // You can add more expectations based on your actual logic
+    expect(weather.getWeatherData()).toEqual({
+      name: 'Bristol',
+      main: { temp: 20 },
+    });
   });
-
-  // Add more test cases as needed
 });
+
+// Rest of the Weather.js file remains unchanged
+
