@@ -1,0 +1,22 @@
+{
+  "name": "weather",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "callback-fetch": "^0.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "node-fetch": "^3.3.2"
+  }
+}

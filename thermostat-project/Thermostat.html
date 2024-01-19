@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thermostat</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+      color: #3498db;
+    }
+
+    .temperature {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .button {
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .reset-button {
+      background-color: #e74c3c;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Thermostat</h1>
+
+  <div class="temperature" id="temperature-display">Current Temperature: Loading...</div>
+
+  <div class="button-container">
+    <button class="button" onclick="increaseTemperature()">Increase Temperature</button>
+    <button class="button" onclick="decreaseTemperature()">Decrease Temperature</button>
+    <button class="button reset-button" onclick="resetTemperature()">Reset Temperature</button>
+    <button class="button" onclick="togglePowerSavingMode()">Toggle Power Saving Mode</button>
+  </div>
+
+  <script>
+    async function fetchTemperature() {
+      const response = await fetch('/temperature');
+      const data = await response.json();
+      document.getElementById('temperature-display').innerText = `Current Temperature: ${data.temperature}°C`;
+    }
+
+    async function increaseTemperature() {
+      await fetch('/up', { method: 'POST' });
+      fetchTemperature();
+    }
+
+    async function decreaseTemperature() {
+      await fetch('/down', { method: 'POST' });
+      fetchTemperature();
+    }
+
+    async function resetTemperature() {
+      await fetch('/temperature', { method: 'DELETE' });
+      fetchTemperature();
+    }
+
+    async function togglePowerSavingMode() {
+      await fetch('/power-saving-mode', { method: 'POST' });
+      fetchTemperature();
+    }
+
+    // Fetch the initial temperature when the page loads
+    document.addEventListener('DOMContentLoaded', fetchTemperature);
+  </script>
+
+</body>
+</html>
