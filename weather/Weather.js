@@ -1,5 +1,5 @@
-//Weather.js
-// const WeatherUI = require('./WeatherUI');
+// Weather.js
+const WeatherUI = require('./WeatherUI');
 const WeatherClient = require('./WeatherClient');
 
 class Weather {
@@ -7,7 +7,7 @@ class Weather {
     this.weatherClient = weatherClient;
     this.city = '';
     this.weatherData = null;
-    // this.weatherUI = new WeatherUI();
+    this.weatherUI = new WeatherUI();
   }
 
   async load(city) {
@@ -15,12 +15,12 @@ class Weather {
   }
 
   getWeatherData() {
-    return this.weatherData
+    return this.weatherData;
   }
 
   async refreshWeatherData() {
     try {
-      const weatherData = await this.fetchWeatherData(this.city);
+      const weatherData = await this.weatherClient.fetchWeatherData(this.city);
       this.weatherUI.displayWeather(weatherData);
     } catch (error) {
       console.error(error.message);
@@ -29,8 +29,8 @@ class Weather {
 
   async compareWith(city) {
     try {
-      const currentWeather = await this.fetchWeatherData(this.city);
-      const otherWeather = await this.fetchWeatherData(city);
+      const currentWeather = await this.weatherClient.fetchWeatherData(this.city);
+      const otherWeather = await this.weatherClient.fetchWeatherData(city);
 
       if (currentWeather.main.temp > otherWeather.main.temp) {
         console.log(`${this.city} is warmer than ${city}`);
@@ -46,12 +46,3 @@ class Weather {
 }
 
 module.exports = Weather;
-
-async function main() {
-  const client = new WeatherClient();
-  const weather = new Weather(client);
-  await weather.load('Bristol');
-  const weatherData = weather.getWeatherData();
-  console.log('weatherData:', weatherData);
-}
-main()

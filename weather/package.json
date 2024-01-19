@@ -13,10 +13,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "callback-fetch": "^0.0.1"
+    "axios": "^1.6.5",
+    "callback-fetch": "^0.0.1",
+    "node-fetch": "^2.7.0"
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "node-fetch": "^3.3.2"
+    "nock": "^13.5.0"
   }
 }
